@@ -1,0 +1,22 @@
+{
+  "name": "@ic-cesium/engine",
+  "version": "0.0.1",
+  "main": "index.ts",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts"
+  },
+  "scripts": {
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "tsup": "^7.2.0"
+  },
+  "dependencies": {
+    "cesium": "^1.110.0"
+  }
+}
