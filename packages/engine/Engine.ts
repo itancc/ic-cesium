@@ -5,6 +5,8 @@ import {
   KeyboardEventModifier,
   Ion,
   defaultValue,
+  //@ts-ignore
+  DrawCommand,
 } from "cesium";
 import { RandomUuid } from "./shared/EngineUtils";
 
@@ -15,7 +17,7 @@ export interface EngineOptions extends Viewer.ConstructorOptions {
   accessToken?: string;
   container: HTMLElement | string;
   /** engine id */
-  id: string;
+  id?: string;
   /** engine name */
   name?: string;
 }
@@ -95,5 +97,9 @@ export class Engine {
 
   public get camera() {
     return this._viewer.camera;
+  }
+
+  public dispose() {
+    this._viewer.destroy();
   }
 }
