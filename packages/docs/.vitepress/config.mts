@@ -1,20 +1,11 @@
 import { defineConfig } from "vitepress";
 import cesium from "vite-plugin-cesium";
-// import { data } from "../src/examples/examples.data";
+
 const nav = [
   { text: "Home", link: "/" },
   { text: "Examples", link: "/examples/" },
   { text: "Api", link: "/api/" },
 ];
-
-// const exampleSidebar = Object.entries(data).map(([key, value]) => {
-//   const description = (value["description.json"] as string) || "{}";
-//   const { title } = JSON.parse(description);
-//   return {
-//     text: title,
-//     link: `/examples/#${key}`,
-//   };
-// });
 
 const sidebar = {
   "/examples/": [
