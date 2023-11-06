@@ -23,30 +23,23 @@ export interface EngineOptions extends Viewer.ConstructorOptions {
 
 export class Engine {
   private _viewer!: Viewer;
-  private _options: EngineOptions;
 
   constructor(options: EngineOptions) {
     const { accessToken, ...restOptions } = options;
-    this._options = this.initOptions(restOptions);
     accessToken && (Ion.defaultAccessToken = accessToken);
-    this.initCesium();
-  }
-  private initOptions(options: Exclude<EngineOptions, "accsessToken">) {
-    return Object.assign(options, {
-      id: RandomUuid(),
-    });
+    this.initCesium(restOptions);
   }
 
   /**
    * Initializes the viewer
    */
-  private initCesium() {
+  private initCesium(options: Exclude<EngineOptions, "accessToken">) {
     const {
       container,
       enableLogo = false,
       enableTerrain = false,
       ...restOptions
-    } = this._options;
+    } = options;
     // default options
     const defaultOptions: Viewer.ConstructorOptions = {
       homeButton: false,
