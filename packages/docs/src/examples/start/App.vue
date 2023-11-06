@@ -6,6 +6,7 @@ const engineContainer = shallowRef();
 onMounted(() => {
   const engine = new Engine({
     container: engineContainer.value,
+    enableTerrain: true,
   });
 });
 </script>

@@ -4,18 +4,17 @@ import {
   CameraEventType,
   KeyboardEventModifier,
   Ion,
-  defaultValue,
-  //@ts-ignore
   DrawCommand,
 } from "cesium";
 import { RandomUuid } from "./shared/EngineUtils";
 
-const CESIUM_ACCESS_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjNTllNWUzMC02YjIxLTQ0ZjktOTAxOS1mNGQ0MzQwNzM5NjQiLCJpZCI6OTc1OCwic2NvcGVzIjpbImFzciIsImdjIl0sImlhdCI6MTU1NDg2NzYxMX0.1RMng8TM5nMjlDCXqBKir0qqHuURt6LwJsy5LNU0oI8";
-
 export interface EngineOptions extends Viewer.ConstructorOptions {
   accessToken?: string;
   container: HTMLElement | string;
+  /** enable cesium logo */
+  enableLogo?: boolean;
+  /** enable default terrain */
+  enableTerrain?: boolean;
   /** engine id */
   id?: string;
   /** engine name */
@@ -29,29 +28,58 @@ export class Engine {
   constructor(options: EngineOptions) {
     const { accessToken, ...restOptions } = options;
     this._options = this.initOptions(restOptions);
-    this.registerAccessToken(accessToken);
-    this.initICesium();
+    accessToken && (Ion.defaultAccessToken = accessToken);
+    this.initCesium();
   }
   private initOptions(options: Exclude<EngineOptions, "accsessToken">) {
     return Object.assign(options, {
       id: RandomUuid(),
     });
   }
-  /**
-   * Registers the access token for the API.
-   */
-  private registerAccessToken(accessToken?: string) {
-    Ion.defaultAccessToken = defaultValue(accessToken, CESIUM_ACCESS_TOKEN);
-  }
+
   /**
    * Initializes the viewer
    */
-  private initICesium() {
-    const { container, ...restOptions } = this._options;
+  private initCesium() {
+    const {
+      container,
+      enableLogo = false,
+      enableTerrain = false,
+      ...restOptions
+    } = this._options;
+    // default options
+    const defaultOptions: Viewer.ConstructorOptions = {
+      homeButton: false,
+      timeline: false,
+      infoBox: false,
+      fullscreenButton: false,
+      geocoder: false,
+      vrButton: false,
+      animation: false,
+      sceneModePicker: false,
+      selectionIndicator: false,
+    };
     this._viewer = new Viewer(container, {
-      terrain: Terrain.fromWorldTerrain(),
+      ...defaultOptions,
       ...restOptions,
     });
+
+    if (enableTerrain) {
+      const terrain = Terrain.fromWorldTerrain({
+        requestVertexNormals: true,
+        requestWaterMask: true,
+      });
+      this._viewer.scene.setTerrain(terrain);
+    }
+    if (!enableLogo) {
+      const logoContainers = document.querySelectorAll<HTMLDivElement>(
+        ".cesium-viewer-bottom"
+      );
+      logoContainers.forEach((logoContainer) => {
+        logoContainer.style.display = "none";
+      });
+    }
+
     this.customCameraController();
   }
 
