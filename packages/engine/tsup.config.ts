@@ -1,5 +1,7 @@
 import { defineConfig } from "tsup";
 import { readFile } from "fs/promises";
+import { join } from "path";
+
 /**
  * 讲资源引入为字符串
  */
@@ -7,12 +9,15 @@ const ImportRawPlugin = () => {
   return {
     name: "importRawPlugin",
     setup(build) {
-      build.onLoad({ filter: /(.glsl|.vert|.frag|.txt)/ }, async (args) => {
-        const content = await readFile(args.path, "utf-8");
-        return {
-          contents: JSON.stringify(content),
-          loader: "text",
-        };
+      const rawReg = /(?:\?|&)raw(?:&|$)/;
+      build.onResolve({ filter: rawReg }, (args) => {
+        const { resolveDir, path } = args;
+        return { path: join(resolveDir, path) };
+      });
+      build.onLoad({ filter: rawReg }, async (args) => {
+        const path = args.path.replace(rawReg, "");
+        const content = await readFile(path, "utf-8");
+        return { contents: JSON.stringify(content), loader: "text" };
       });
     },
   };
@@ -23,5 +28,6 @@ export default defineConfig({
   dts: true,
   format: ["esm", "cjs"],
   external: ["cesium"],
+  minify: true,
   esbuildPlugins: [ImportRawPlugin()],
 });
