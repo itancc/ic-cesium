@@ -15,7 +15,7 @@ const selectPkgs = async (pkgs: Project[] = []) => {
   const pkgPrompts = await prompt({
     type: "multiselect",
     name: "selectPublishPkg",
-    message: "选择要发布的包",
+    message: "please select publish package",
     choices: pkgs.map((pkg) => ({
       title: pkg.manifest.name,
       value: pkg,
