@@ -6,7 +6,6 @@ import {
   Ion,
   DrawCommand,
 } from "cesium";
-import { RandomUuid } from "./shared/EngineUtils";
 
 export interface EngineOptions extends Viewer.ConstructorOptions {
   accessToken?: string;
