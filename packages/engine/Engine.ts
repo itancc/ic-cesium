@@ -4,8 +4,9 @@ import {
   CameraEventType,
   KeyboardEventModifier,
   Ion,
-  DrawCommand,
+  Cartesian3,
 } from "cesium";
+import { CommonSdk } from "./core/CoomonSDK";
 
 export interface EngineOptions extends Viewer.ConstructorOptions {
   accessToken?: string;
@@ -18,30 +19,25 @@ export interface EngineOptions extends Viewer.ConstructorOptions {
   id?: string;
   /** engine name */
   name?: string;
+  /** */
+  center: Cartesian3;
 }
 
-export class Engine {
-  private _viewer!: Viewer;
-
+export class Engine extends CommonSdk {
   constructor(options: EngineOptions) {
-    const { accessToken, ...restOptions } = options;
-    accessToken && (Ion.defaultAccessToken = accessToken);
-    this.initCesium(restOptions);
-  }
-
-  /**
-   * Initializes the viewer
-   */
-  private initCesium(options: Exclude<EngineOptions, "accessToken">) {
     const {
+      accessToken,
       container,
       enableLogo = false,
       enableTerrain = false,
+      center,
       ...restOptions
     } = options;
+    accessToken && (Ion.defaultAccessToken = accessToken);
+
     // default options
     const defaultOptions: Viewer.ConstructorOptions = {
-      homeButton: false,
+      homeButton: true,
       timeline: false,
       infoBox: false,
       fullscreenButton: false,
@@ -51,72 +47,66 @@ export class Engine {
       sceneModePicker: false,
       selectionIndicator: false,
     };
-    this._viewer = new Viewer(container, {
+    const viewer = new Viewer(container, {
       ...defaultOptions,
       ...restOptions,
     });
+    super(viewer);
+    this.flyToSpherBounding({ position: center });
+    this.enableLogo = enableLogo;
+    this.enableTerrain = enableTerrain;
+    this.enablePresetCameraController = true;
+  }
 
-    if (enableTerrain) {
+  public set enableTerrain(enable: boolean) {
+    if (enable) {
       const terrain = Terrain.fromWorldTerrain({
         requestVertexNormals: true,
         requestWaterMask: true,
       });
-      this._viewer.scene.setTerrain(terrain);
+      this.scene.setTerrain(terrain);
+    } else {
+      this.scene.terrainProvider = undefined;
     }
-    if (!enableLogo) {
-      const logoContainers = document.querySelectorAll<HTMLDivElement>(
-        ".cesium-viewer-bottom"
-      );
-      logoContainers.forEach((logoContainer) => {
-        logoContainer.style.display = "none";
-      });
+  }
+  public set enableLogo(enable: boolean) {
+    const logoContainers = document.querySelectorAll<HTMLDivElement>(
+      ".cesium-viewer-bottom"
+    );
+    logoContainers.forEach((logoContainer) => {
+      logoContainer.style.display = enable ? "block" : "none";
+    });
+  }
+  public set enablePresetCameraController(enable: boolean) {
+    if (enable) {
+      // 更改默认的鼠标控制方式
+      this.scene.screenSpaceCameraController.zoomEventTypes = [
+        CameraEventType.WHEEL,
+        CameraEventType.PINCH,
+      ];
+      this.scene.screenSpaceCameraController.tiltEventTypes = [
+        CameraEventType.RIGHT_DRAG,
+        CameraEventType.PINCH,
+      ];
+    } else {
+      this.scene.screenSpaceCameraController.zoomEventTypes = [
+        CameraEventType.RIGHT_DRAG,
+        CameraEventType.WHEEL,
+        CameraEventType.PINCH,
+      ];
+      this.scene.screenSpaceCameraController.tiltEventTypes = [
+        CameraEventType.MIDDLE_DRAG,
+        CameraEventType.PINCH,
+        {
+          eventType: CameraEventType.LEFT_DRAG,
+          modifier: KeyboardEventModifier.CTRL,
+        },
+        {
+          eventType: CameraEventType.RIGHT_DRAG,
+          modifier: KeyboardEventModifier.CTRL,
+        },
+      ];
     }
-
-    this.customCameraController();
-  }
-
-  public customCameraController() {
-    // 更改默认的鼠标控制方式
-    this.scene.screenSpaceCameraController.zoomEventTypes = [
-      CameraEventType.WHEEL,
-      CameraEventType.PINCH,
-    ];
-    this.scene.screenSpaceCameraController.tiltEventTypes = [
-      CameraEventType.RIGHT_DRAG,
-      CameraEventType.PINCH,
-    ];
-  }
-
-  public originCameraController() {
-    this.scene.screenSpaceCameraController.zoomEventTypes = [
-      CameraEventType.RIGHT_DRAG,
-      CameraEventType.WHEEL,
-      CameraEventType.PINCH,
-    ];
-    this.scene.screenSpaceCameraController.tiltEventTypes = [
-      CameraEventType.MIDDLE_DRAG,
-      CameraEventType.PINCH,
-      {
-        eventType: CameraEventType.LEFT_DRAG,
-        modifier: KeyboardEventModifier.CTRL,
-      },
-      {
-        eventType: CameraEventType.RIGHT_DRAG,
-        modifier: KeyboardEventModifier.CTRL,
-      },
-    ];
-  }
-
-  public get viewer() {
-    return this._viewer;
-  }
-
-  public get scene() {
-    return this._viewer.scene;
-  }
-
-  public get camera() {
-    return this._viewer.camera;
   }
 
   public dispose() {
