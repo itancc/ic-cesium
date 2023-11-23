@@ -6,7 +6,7 @@ import {
   Ion,
   Cartesian3,
 } from "cesium";
-import { CommonSdk } from "./core/CoomonSDK";
+import { CommonSdk } from "./core/CoomonSdk";
 
 export interface EngineOptions extends Viewer.ConstructorOptions {
   accessToken?: string;
