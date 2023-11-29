@@ -9,7 +9,7 @@ import {
 
 export interface flyToBoundingSphereOptions {
   position?: Cartesian3;
-  raduis?: number;
+  radius?: number;
   duration?: number;
   heading?: number;
   pitch?: number;
@@ -62,7 +62,7 @@ export class CommonSdk {
   public flyToSpherBounding(options: flyToBoundingSphereOptions) {
     const {
       position,
-      raduis = 100,
+      radius = 100,
       duration = 1,
       heading,
       pitch,
@@ -70,7 +70,7 @@ export class CommonSdk {
     } = options;
     if (!position) throw new Error("position is required");
     if (this.isInGlobe(position)) throw new Error("position is in globe");
-    const _bs = new BoundingSphere(position, raduis);
+    const _bs = new BoundingSphere(position, radius);
     this.camera.flyToBoundingSphere(_bs, {
       duration,
       offset: new HeadingPitchRange(

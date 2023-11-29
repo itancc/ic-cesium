@@ -19,8 +19,6 @@ export interface EngineOptions extends Viewer.ConstructorOptions {
   id?: string;
   /** engine name */
   name?: string;
-  /** */
-  center: Cartesian3;
 }
 
 export class Engine extends CommonSdk {
@@ -30,7 +28,6 @@ export class Engine extends CommonSdk {
       container,
       enableLogo = false,
       enableTerrain = false,
-      center,
       ...restOptions
     } = options;
     accessToken && (Ion.defaultAccessToken = accessToken);
@@ -52,7 +49,6 @@ export class Engine extends CommonSdk {
       ...restOptions,
     });
     super(viewer);
-    this.flyToSpherBounding({ position: center });
     this.enableLogo = enableLogo;
     this.enableTerrain = enableTerrain;
     this.enablePresetCameraController = true;

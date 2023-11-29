@@ -8,7 +8,10 @@ onMounted(() => {
   const engine = new Engine({
     container: engineContainer.value,
     enableTerrain: true,
-    center: Cartesian3.fromDegrees(106.551478, 29.608857, 2000),
+  });
+  engine.flyToSpherBounding({
+    position: Cartesian3.fromDegrees(106.551478, 29.608857, 2000),
+    radius: 50,
   });
 });
 </script>
