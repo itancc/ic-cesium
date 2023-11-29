@@ -24,7 +24,7 @@ const ImportRawPlugin = () => {
 };
 
 export default defineConfig({
-  entry: ["index.ts"],
+  entry: ["./index.ts"],
   dts: true,
   format: ["esm", "cjs"],
   external: ["cesium"],

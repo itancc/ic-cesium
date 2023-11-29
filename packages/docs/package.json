@@ -8,7 +8,7 @@
     "docs:preview": "vitepress preview"
   },
   "dependencies": {
-    "@ic-cesium/engine": "workspace:^",
+    "@ic-cesium/core": "workspace:^",
     "cesium": "^1.110.0",
     "vite-plugin-cesium": "^1.2.22",
     "vitepress": "1.0.0-rc.22",

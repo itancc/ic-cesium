@@ -1,5 +1,5 @@
 {
-  "name": "@ic-cesium/engine",
+  "name": "@ic-cesium/core",
   "version": "0.0.1",
   "main": "index.ts",
   "files": [

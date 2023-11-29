@@ -4,28 +4,26 @@ import {
   CameraEventType,
   KeyboardEventModifier,
   Ion,
-  Cartesian3,
 } from "cesium";
-import { CommonSdk } from "./core/CoomonSdk";
+import { CommonSdk } from "./CoomonSdk";
+import { Engine } from "../engines/Engine";
 
-export interface EngineOptions extends Viewer.ConstructorOptions {
+export interface SceneOptions extends Viewer.ConstructorOptions {
   accessToken?: string;
-  container: HTMLElement | string;
   /** enable cesium logo */
   enableLogo?: boolean;
   /** enable default terrain */
   enableTerrain?: boolean;
-  /** engine id */
+  /** scene id */
   id?: string;
-  /** engine name */
+  /** scene name */
   name?: string;
 }
 
-export class Engine extends CommonSdk {
-  constructor(options: EngineOptions) {
+export class Scene extends CommonSdk {
+  constructor(engine: Engine, options: SceneOptions) {
     const {
       accessToken,
-      container,
       enableLogo = false,
       enableTerrain = false,
       ...restOptions
@@ -44,9 +42,11 @@ export class Engine extends CommonSdk {
       sceneModePicker: false,
       selectionIndicator: false,
     };
+    const container = engine.getInputElement();
     const viewer = new Viewer(container, {
       ...defaultOptions,
       ...restOptions,
+      useDefaultRenderLoop: false,
     });
     super(viewer);
     this.enableLogo = enableLogo;
@@ -103,6 +103,10 @@ export class Engine extends CommonSdk {
         },
       ];
     }
+  }
+
+  public render() {
+    this.viewer.render();
   }
 
   public dispose() {
