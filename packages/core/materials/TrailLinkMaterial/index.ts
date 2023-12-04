@@ -1,5 +1,5 @@
 import { Cartesian2, Color, Material } from "cesium";
-import { CesiumMaterialOptions } from "../../shared/CesiumTypes";
+import { CesiumMaterialOptions } from "../../misc/types/CesiumTypes";
 import source from "./source.glsl?raw";
 
 export interface TrailLinkMaterialOptions extends CesiumMaterialOptions {

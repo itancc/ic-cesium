@@ -1,5 +1,5 @@
 import { Material } from "cesium";
-import { CesiumMaterialOptions } from "../../shared/CesiumTypes";
+import { CesiumMaterialOptions } from "../../misc/types/CesiumTypes";
 
 export interface FireSurfaceMaterialOptions extends CesiumMaterialOptions {}
 

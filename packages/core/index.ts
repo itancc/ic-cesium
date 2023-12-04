@@ -1,5 +1,6 @@
 export * from "./scene/Scene";
 export * from "./engines/Engine";
+export * from "./engines/EngineConstants";
 
 export * from "./materials/AlphaGrowPlaneMaterial";
 

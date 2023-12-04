@@ -1,6 +1,6 @@
 import { isWindowAvailable } from "../misc/commonUtils";
 import { Nullable } from "../misc/types/SharedTypes";
-import { defined } from "cesium";
+import { Event as SubEvent, defined } from "cesium";
 
 export interface EngineOptions {
   /** 抗锯齿 */
@@ -10,7 +10,6 @@ export interface EngineOptions {
 export class Engine {
   protected _activeRenderLoops = new Array<() => void>();
   protected _renderingCanvas: Nullable<HTMLCanvasElement>;
-  private _onContextLost: Nullable<(event: Event) => void>;
   protected _contextWasLost = false;
   protected _renderingQueueLaunched = false;
   protected _frameHandler: Nullable<number>;
@@ -18,6 +17,15 @@ export class Engine {
   protected _isDisposed = false;
   /** 引擎是否处于不可见 */
   protected _windowIsBackground = false;
+  /// 一些事件处理
+  private _onContextLost: Nullable<(event: Event) => void>;
+
+  public onCanvasFocusEvent = new SubEvent();
+  private _onCanvasFocus: Nullable<() => void>;
+
+  private _onWindowBlur: Nullable<() => void>;
+  private _onWindowFocus: Nullable<() => void>;
+
   constructor(
     canvas: Nullable<HTMLCanvasElement>,
     options: EngineOptions = {}
@@ -25,8 +33,25 @@ export class Engine {
     if (!defined(canvas)) throw new Error("canvas is not defined");
     this._renderingCanvas = canvas;
 
+    this._onCanvasFocus = () => {
+      this.onCanvasFocusEvent.raiseEvent();
+    };
+    canvas.addEventListener("focus", this._onCanvasFocus);
+
+    this._onWindowBlur = () => {
+      this._windowIsBackground = true;
+    };
+    this._onWindowFocus = () => {
+      this._windowIsBackground = false;
+    };
+    const hostWindow = this.getHostWindow();
+    if (hostWindow) {
+      hostWindow.addEventListener("blur", this._onWindowBlur);
+      hostWindow.addEventListener("focus", this._onWindowFocus);
+    }
+
     // 处理Content丢失
-    this._onContextLost = (evt: Event) => {
+    this._onContextLost = (evt) => {
       evt.preventDefault();
       this._contextWasLost = true;
       console.warn("Context lost");
@@ -108,11 +133,23 @@ export class Engine {
     this.stopRenderLoop();
 
     // clear event
-    this._renderingCanvas &&
+    if (this._renderingCanvas) {
       this._renderingCanvas.removeEventListener(
         "webglcontextlost",
         this._onContextLost,
         false
       );
+      this._renderingCanvas.removeEventListener(
+        "focus",
+        this._onCanvasFocus,
+        false
+      );
+      this.onCanvasFocusEvent.removeEventListener(this._onCanvasFocus);
+    }
+    const hostWindow = this.getHostWindow();
+    if (hostWindow) {
+      hostWindow.removeEventListener("blur", this._onWindowBlur);
+      hostWindow.removeEventListener("focus", this._onWindowFocus);
+    }
   }
 }
