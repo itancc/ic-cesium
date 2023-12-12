@@ -18,14 +18,18 @@ export interface SceneOptions extends Viewer.ConstructorOptions {
   id?: string;
   /** scene name */
   name?: string;
+  /** enable render loop,other than cesium useDefaultRenderLoop, default true */
+  enableRenderLoop?: boolean;
 }
 
 export class Scene extends CommonSdk {
+  private _engine: Engine;
   constructor(engine: Engine, options: SceneOptions) {
     const {
       accessToken,
       enableLogo = false,
       enableTerrain = false,
+      enableRenderLoop = true,
       ...restOptions
     } = options;
     accessToken && (Ion.defaultAccessToken = accessToken);
@@ -42,6 +46,7 @@ export class Scene extends CommonSdk {
       sceneModePicker: false,
       selectionIndicator: false,
     };
+
     const container = engine.getInputElement();
     const viewer = new Viewer(container, {
       ...defaultOptions,
@@ -49,9 +54,13 @@ export class Scene extends CommonSdk {
       useDefaultRenderLoop: false,
     });
     super(viewer);
+    this._engine = engine;
     this.enableLogo = enableLogo;
     this.enableTerrain = enableTerrain;
     this.enablePresetCameraController = true;
+    if (enableRenderLoop) {
+      engine.runRenderLoop(() => this.render());
+    }
   }
 
   public set enableTerrain(enable: boolean) {

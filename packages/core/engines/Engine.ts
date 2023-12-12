@@ -8,11 +8,11 @@ export interface EngineOptions {
 }
 /** 负责对接所有低级api，如WebGL和Audio */
 export class Engine {
-  protected _activeRenderLoops = new Array<() => void>();
-  protected _renderingCanvas: Nullable<HTMLCanvasElement>;
-  protected _contextWasLost = false;
-  protected _renderingQueueLaunched = false;
-  protected _frameHandler: Nullable<number>;
+  private _activeRenderLoops = new Array<() => void>();
+  private _renderingCanvas: Nullable<HTMLCanvasElement>;
+  private _contextWasLost = false;
+  private _renderingQueueLaunched = false;
+  private _frameHandler: Nullable<number>;
   /** 引擎是否销毁 */
   protected _isDisposed = false;
   /** 引擎是否处于不可见 */
@@ -32,7 +32,11 @@ export class Engine {
   ) {
     if (!defined(canvas)) throw new Error("canvas is not defined");
     this._renderingCanvas = canvas;
+    this._eventHandler(canvas);
+  }
 
+  /** 注册一些事件，并对某些特定事件进行广播 */
+  private _eventHandler = (canvas: HTMLCanvasElement) => {
     this._onCanvasFocus = () => {
       this.onCanvasFocusEvent.raiseEvent();
     };
@@ -57,9 +61,8 @@ export class Engine {
       console.warn("Context lost");
     };
     canvas.addEventListener("webglcontextlost", this._onContextLost, false);
-  }
-
-  private get isRenderFrame() {
+  };
+  private get _isRenderFrame() {
     return !this._isDisposed && !this._windowIsBackground;
   }
   public get version() {
@@ -68,7 +71,7 @@ export class Engine {
 
   /** */
   private _renderLoop() {
-    if (!this._contextWasLost && this.isRenderFrame) {
+    if (!this._contextWasLost && this._isRenderFrame) {
       this._activeRenderLoops.forEach((renderFunction) => {
         renderFunction();
       });
@@ -79,7 +82,7 @@ export class Engine {
       this._renderingQueueLaunched = false;
     }
   }
-  protected _cancelFrame() {
+  private _cancelFrame() {
     if (this._renderingQueueLaunched && this._frameHandler) {
       this._renderingQueueLaunched = false;
       const requestContent = this.getHostWindow();

@@ -13,9 +13,7 @@ onMounted(() => {
     position: Cartesian3.fromDegrees(106.551478, 29.608857, 2000),
     radius: 50,
   });
-  engine.runRenderLoop(() => {
-    scene.render();
-  });
+
   return () => {
     engine.dispose();
     scene.dispose();

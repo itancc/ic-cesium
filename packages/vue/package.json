@@ -1,0 +1,13 @@
+{
+  "name": "@ic-cesium/vue",
+  "description": "A Vue.js component for ic-cesium",
+  "version": "0.0.1",
+  "main": "index.ts",
+  "scripts": {},
+  "dependencies": {
+    "@ic-cesium/core": "workspace:^"
+  },
+  "devDependencies": {
+    "vite": "^5.0.7"
+  }
+}
