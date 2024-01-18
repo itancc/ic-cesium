@@ -14,6 +14,10 @@ const sidebar = {
       items: [
         { text: "start-icesium", link: "/examples/#start" },
         { text: "test-icesium", link: "/examples/#test" },
+        {
+          text: "atmospheric-scattering",
+          link: "/examples/#atmospheric-scattering",
+        },
       ],
     },
   ],
@@ -32,6 +36,6 @@ export default defineConfig({
     ],
   },
   vite: {
-    plugins: [cesium()],
+    plugins: [cesium() as any],
   },
 });

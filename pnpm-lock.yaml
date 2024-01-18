@@ -56,7 +56,7 @@ importers:
         version: 1.111.0
       vite-plugin-cesium:
         specifier: ^1.2.22
-        version: 1.2.22(cesium@1.111.0)(rollup@2.79.1)(vite@5.0.3)
+        version: 1.2.22(cesium@1.111.0)(rollup@2.79.1)(vite@5.0.7)
       vitepress:
         specifier: 1.0.0-rc.22
         version: 1.0.0-rc.22(@algolia/client-search@4.20.0)(@types/node@20.10.0)(search-insights@2.11.0)(typescript@5.3.2)
@@ -69,6 +69,9 @@ importers:
       '@ic-cesium/core':
         specifier: workspace:^
         version: link:../core
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.9(typescript@5.3.2)
     devDependencies:
       vite:
         specifier: ^5.0.7
@@ -1025,7 +1028,7 @@ packages:
       '@vue/shared': 3.3.9
       estree-walker: 2.0.2
       magic-string: 0.30.5
-      postcss: 8.4.31
+      postcss: 8.4.32
       source-map-js: 1.0.2
     dev: false
 
@@ -2378,7 +2381,6 @@ packages:
       nanoid: 3.3.7
       picocolors: 1.0.0
       source-map-js: 1.0.2
-    dev: true
 
   /preact@10.19.2:
     resolution: {integrity: sha512-UA9DX/OJwv6YwP9Vn7Ti/vF80XL+YA5H2l7BpCtUr3ya8LWHFzpiO5R+N7dN16ujpIxhekRFuOOF82bXX7K/lg==}
@@ -2890,7 +2892,7 @@ packages:
     resolution: {integrity: sha512-HXgFDgDommxn5/bIv0cnQZsPhHDA90NPHD6+c/v21U5+Sx5hoP8+dP9IZXBU1gIfvdRfhG8cel9QNPeionfcCQ==}
     dev: false
 
-  /vite-plugin-cesium@1.2.22(cesium@1.111.0)(rollup@2.79.1)(vite@5.0.3):
+  /vite-plugin-cesium@1.2.22(cesium@1.111.0)(rollup@2.79.1)(vite@5.0.7):
     resolution: {integrity: sha512-OnS+VKNGck4kUu4/67Fdfhz0/zF9mDVNUp9hUWtX19C38O0mJsJy2MH1ev2QcrVLf6VieJ7vCGxkLchdB1n1HQ==}
     peerDependencies:
       cesium: ^1.95.0
@@ -2900,7 +2902,7 @@ packages:
       fs-extra: 9.1.0
       rollup-plugin-external-globals: 0.6.1(rollup@2.79.1)
       serve-static: 1.15.0
-      vite: 5.0.3(@types/node@20.10.0)
+      vite: 5.0.7(@types/node@20.10.0)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -2942,42 +2944,6 @@ packages:
       fsevents: 2.3.3
     dev: false
 
-  /vite@5.0.3(@types/node@20.10.0):
-    resolution: {integrity: sha512-WgEq8WEKpZ8c0DL4M1+E+kBZEJyjBmGVrul6z8Ljfhv+PPbNF4aGq014DwNYxGz2FGq6NKL0N8usdiESWd2l2w==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || >=20.0.0
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-    dependencies:
-      '@types/node': 20.10.0
-      esbuild: 0.19.8
-      postcss: 8.4.31
-      rollup: 4.6.0
-    optionalDependencies:
-      fsevents: 2.3.3
-    dev: false
-
   /vite@5.0.7(@types/node@20.10.0):
     resolution: {integrity: sha512-B4T4rJCDPihrQo2B+h1MbeGL/k/GMAHzhQ8S0LjQ142s6/+l3hHTT095ORvsshj4QCkoWu3Xtmob5mazvakaOw==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -3012,7 +2978,6 @@ packages:
       rollup: 4.6.0
     optionalDependencies:
       fsevents: 2.3.3
-    dev: true
 
   /vitepress@1.0.0-rc.22(@algolia/client-search@4.20.0)(@types/node@20.10.0)(search-insights@2.11.0)(typescript@5.3.2):
     resolution: {integrity: sha512-n7le5iikCFgWMuX7sKfzDGJGlrsYQ5trG3S97BghNz2alOTr4Xp+GrB6ShwogUTX9gNgeNmrACjokhW55LNeBA==}

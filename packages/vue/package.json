@@ -5,7 +5,8 @@
   "main": "index.ts",
   "scripts": {},
   "dependencies": {
-    "@ic-cesium/core": "workspace:^"
+    "@ic-cesium/core": "workspace:^",
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "vite": "^5.0.7"
