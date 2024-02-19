@@ -35,4 +35,17 @@ declare module "cesium" {
   export class DrawCommand {
     constructor(options: DrawCommandOptions);
   }
+  // 扩展原有的CesiumWidget Class类型
+  export interface CesiumWidget {
+    _canRender: boolean;
+    _scene: Scene;
+    _clock: Clock;
+  }
+  export interface Scene {
+    initializeFrame: () => void;
+    _preUpdate: Event<any>;
+    _frameState: any;
+    _view: any;
+    _globeHeightDirty: boolean;
+  }
 }

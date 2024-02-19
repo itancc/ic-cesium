@@ -62,3 +62,7 @@
 1. core 核心引擎
 2. 通过 core 引擎，构建出 Vue Cesium 组件,参考 react-three-fiber
 3. 完善 docs,通过 vue 组件写好示例以及文档
+
+了解 Cesium 的渲染流程。
+到底如何将 babylonjs 与 cesiumjs 进行深度融合
+结构如何去写
