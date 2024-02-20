@@ -104,14 +104,17 @@ const changeVersion = async (
 ) => {
   try {
     console.log(chalk.magenta("change version ..."));
+    const pkgNewVersion = {};
     for (const selectPkg of selectPkgs) {
-      await versionBump({
+      const { newVersion } = await versionBump({
         release: versionType,
         preid: releaseType,
         cwd: selectPkg.dir,
       });
+      pkgNewVersion[selectPkg.manifest.name] = newVersion;
     }
     console.log(chalk.green("change version success"));
+    return pkgNewVersion;
   } catch (e) {
     console.log(chalk.red("change version failed !"));
     process.exit(1);
@@ -119,10 +122,17 @@ const changeVersion = async (
 };
 
 /** git commit  */
-const commit = async (commit?: string) => {
+const commit = async (pkgNewVersion: Object) => {
   console.log(chalk.magenta("commit ..."));
+  const commitInfo = Object.entries(pkgNewVersion).map(
+    ([dir, version]) => `${dir}: ${version}`
+  );
   await execa("git", ["add", "."]);
-  await execa("git", ["commit", "-m", commit || "release: change version"]);
+  await execa("git", [
+    "commit",
+    "-m",
+    `release: publish packages: ${commitInfo.join(", ")}`,
+  ]);
   console.log(chalk.green("commit success"));
 };
 
@@ -174,8 +184,12 @@ const main = async () => {
     process.exit(1);
   }
 
-  await changeVersion(_selectPkgs, versionType, releaseType);
-  await commit();
+  const pkgNewVersion = await changeVersion(
+    _selectPkgs,
+    versionType,
+    releaseType
+  );
+  await commit(pkgNewVersion);
   await publish(_selectPkgs);
   await push();
 };
