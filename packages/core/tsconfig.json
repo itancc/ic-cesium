@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
     "moduleResolution": "Bundler",
-    "module": "ESNext"
+    "module": "ESNext",
+    "paths": {
+      "@/*": ["./*"]
+    }
   }
 }

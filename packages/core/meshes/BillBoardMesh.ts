@@ -1,12 +1,9 @@
-import { BillboardGraphics } from "cesium";
-import { Scene } from "../scene/Scene";
+import { Primitive } from "cesium";
+import { Scene } from "@/scene/Scene";
 
-export interface BillBoardMeshOptions
-  extends BillboardGraphics.ConstructorOptions {}
-export class BillBoardMesh extends BillboardGraphics {
-  constructor(opt: BillBoardMeshOptions, scene: Scene) {
-    super(opt);
-  }
+export interface BillBoardMeshOptions {}
+export class BillBoardMesh {
+  constructor(opt: BillBoardMeshOptions, scene: Scene) {}
 }
 
 export function createBillBoard(opt: BillBoardMeshOptions, scene: Scene) {

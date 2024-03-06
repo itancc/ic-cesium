@@ -29,5 +29,6 @@ export default defineConfig({
   format: ["esm", "cjs"],
   external: ["cesium"],
   minify: true,
+
   esbuildPlugins: [ImportRawPlugin()],
 });
