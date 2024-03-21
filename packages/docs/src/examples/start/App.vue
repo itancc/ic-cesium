@@ -1,24 +1,9 @@
 <script setup lang="ts">
-import { Engine, Scene } from "@ic-cesium/core";
 import { Cartesian3 } from "cesium";
 import { onMounted, shallowRef } from "vue";
 
 const engineContainer = shallowRef();
-onMounted(() => {
-  const engine = new Engine(engineContainer.value);
-  const scene = new Scene(engine, {
-    enableTerrain: true,
-  });
-  scene.flyToSpherBounding({
-    position: Cartesian3.fromDegrees(106.551478, 29.608857, 2000),
-    radius: 50,
-  });
-
-  return () => {
-    engine.dispose();
-    scene.dispose();
-  };
-});
+onMounted(() => {});
 </script>
 
 <template>
